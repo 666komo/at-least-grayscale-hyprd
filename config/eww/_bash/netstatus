@@ -1,0 +1,91 @@
+# bash script to determite network connection type; if wifi: determine wifi strenght, wifi ssid; if wired: determine wired connection speed
+# each should be in separate functions; functions are called via argument whe running the script
+
+#!/bin/bash
+
+# Function to check if connected via WiFi
+is_wifi_connected() {
+    nmcli -t -f TYPE,STATE device | grep -q "^wifi:connected"
+}
+
+# Function to check if connected via wired connection
+is_wired_connected() {
+    nmcli -t -f TYPE,STATE device | grep -q "^ethernet:connected"
+}
+
+# Function to determine connection type
+determine_type() {
+    if is_wifi_connected; then
+        echo "wireless"
+    elif is_wired_connected; then
+        echo "wired"
+    else
+        echo "Error: No active connection."
+    fi
+}
+
+# Function to determine SSID or connection type for Ethernet
+determine_ssid() {
+    if is_wifi_connected; then
+        ssid=$(nmcli -t -f SSID connection show --active | head -n 1)
+        echo "$ssid"
+    elif is_wired_connected; then
+        echo "Ethernet"
+    else
+        echo "Error: No active connection."
+    fi
+}
+
+# Function to determine WiFi signal strength
+determine_wifi_strength() {
+    if is_wifi_connected; then
+        signal=$(nmcli -t -f IN-USE,SIGNAL dev wifi | grep '*' | cut -d: -f2)
+        if [ -n "$signal" ]; then
+            echo "$signal"
+        else
+            echo "Error: Unable to determine WiFi signal strength."
+        fi
+    else
+        echo "Error: Not connected to WiFi."
+    fi
+}
+
+# Function to determine wired connection speed
+determine_wired_speed() {
+    if is_wired_connected; then
+        speed=$(ethtool "$(nmcli -t -f DEVICE connection show --active | head -n 1)" 2>/dev/null | grep "Speed:" | awk '{print $2}')
+        if [ -n "$speed" ]; then
+            echo "$speed"
+        else
+            echo "Error: Unable to determine wired connection speed."
+        fi
+    else
+        echo "Error: Not connected via Ethernet."
+    fi
+}
+
+# Main script logic
+if [ -z "$1" ]; then
+    echo "Error: No argument provided. Use 'type', 'ssid', 'strength', or 'speed'."
+    exit 1
+fi
+
+case "$1" in
+    type)
+        determine_type
+        ;;
+    ssid)
+        determine_ssid
+        ;;
+    strength)
+        determine_wifi_strength
+        ;;
+    speed)
+        determine_wired_speed
+        ;;
+    *)
+        echo "Error: Invalid argument. Use 'type', 'ssid', 'strength', or 'speed'."
+        exit 1
+        ;;
+esac
+

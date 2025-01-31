@@ -1,0 +1,51 @@
+.name{
+  font-size: 1.3em;
+  font-weight: bold;
+  font-family: "SF Pro Nerd";
+  margin: 0px 0;
+}
+
+.artist{
+  font-size: 1em;
+  font-family: "SF Pro Nerd";
+  margin: 0px 0;
+}
+
+.album{
+  font-size:0.9em;
+  font-family: "SF Pro Nerd";
+  margin: 0px 0;
+}
+
+.play{
+  font-size: 2em;
+  margin: 20px 14px;
+  border-radius: 10px;
+  background-color: $foreground;
+  color: $font-high;
+  padding: 0px;
+  transition: 0.3s;
+}
+
+.play:hover{
+  background-color: $font-low;
+  color: $font-high;
+  border: 2px solid $white;
+}
+
+.prev, .next{
+  font-size: 1.5em;
+  margin: 30px 23px;
+  border-radius: 50px;
+  color: $font;
+  background-color: $background;
+  padding-right: 7px;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.prev:hover, .next:hover{
+  background-color: $foreground;
+  color: $font-high;
+  border: 2px solid $white;
+}

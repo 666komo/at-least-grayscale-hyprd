@@ -1,0 +1,32 @@
+(defwindow keyboard_selector
+   :monitor 0
+   :geometry (geometry :x "20px"
+   		       :y "20px"
+                       :width "250px"
+   		       :height "180px"
+		       :anchor "top right")
+   :stacking 'fg'
+   :windowtype 'dialog'
+   :exclusive false
+   :wm-ignore true
+   (keyboard_selector))
+
+(defwidget keyboard_selector []
+  (eventbox
+    :onhoverlost "eww close keyboard_selector"
+    (box :class 'window'
+         :orientation 'vertical'
+	 :spacing 5
+	 (label :class 'kblabel' :text "Select keyboard layout")(kb_us)(kb_dvorak))))
+
+(defwidget kb_us []
+  (button :class 'kbbtn'
+          :onclick 'hyprctl keyword input:kb_variant "";eww close keyboard_selector'
+	  "US - QWERTY"))
+
+(defwidget kb_dvorak []
+  (button :class 'kbbtn'
+	  :onclick 'hyprctl keyword input:kb_variant dvorak; eww close keyboard_selector'
+	  "US - Dvorak"))
+		
+

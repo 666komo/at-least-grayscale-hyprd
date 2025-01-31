@@ -1,0 +1,251 @@
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x '0%'
+  		      :y '0%'
+		      :width '100%'
+		      :height '30px'
+		      :anchor 'top center')
+  :stacking 'fg'
+  :reserve (struts :distance '30px' :side 'top')
+  :windowtype 'dock'
+  :exclusive true
+  :wm-ignore false
+  (bar))
+
+(defwidget bar []
+  (box  :class 'bar'
+  	:orientation 'horizontal'
+  	:space-evenly true
+  	(left)(center)(right)))
+  
+(defwidget left []
+  (box :class 'left'
+       :orientation 'horizontal'
+       :space-evenly false
+       :halign 'start'
+       (ctl_menu)(currentwindow)))
+
+(defwidget center []
+  (box :class 'center'
+       :orientation 'horizontal'
+       :space-evenly false
+       :halign 'center'
+       (workspaces)(player)))
+
+(defwidget right []
+  (box :class 'right'
+       :orientation 'horizontal'
+       :space-evenly false
+       :halign 'end'
+       (tbox_widget)(tray)(clock)))
+
+(defwidget ctl_menu []
+  (button :class 'ctl_menu_widget'
+          :onclick 'eww open ctl_menu'
+	  '󰣇'))
+
+
+(defwidget workspaces []
+  (box :class "workspaces"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+    (for ws in workspace
+      (button
+        :class "workspace-button"
+        :onclick "hyprctl dispatch workspace ${ws.id}"
+        "${ws.icon}${ws.name}"))))
+
+(defwidget currentwindow []
+  (box :class "currentwindow"
+       :orientation "h"
+       :space-evenly false
+       :halign "start"
+       "${window}"))
+
+(defwidget player []
+  (box :orientation "h"
+       :space-evenly false
+       :halign "center"
+       (button 
+        :class "player"
+	:onclick "eww open player_ctl"
+    	{player != "" ? "󰎆  ${player_truncated}" : "󰎆  Player Offline"})))
+
+(deflisten player :initial ""
+  "playerctl --follow metadata --format ' {{ artist }} - {{ title }}' || true")
+
+(defvar player_max_length 30)
+
+(defpoll player_truncated :interval "1s"
+  "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} metadata --format ' {{ artist }} - {{ title }}' | cut -c1-60 | awk '{print $0 (length($0) > 60 ? \"...\" : \"\")}'")
+
+(defpoll player_full :interval "1s"
+  "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} metadata --format ' {{ artist }} - {{ title }}'")
+
+(defwidget clock []
+  (box :class "clock"
+       :orientation "h"
+       :halign "start"
+    (label :text "${panel_clock}")))
+
+(defwidget tray []
+  (box :class "tray"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+    (network)(volume)(power)(brightness)))
+
+(defwidget network []
+  (box :class "network"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+       (label :text {
+         netstatus == "wireless" ? 
+	   wifist < 30 ? wifilow_icon :
+	   wifist < 60 ? wifimedium_icon :
+	   wifihigh_icon :
+	 netstatus == "wired" ? ethernet_icon :
+	 disconnected_icon
+       })))
+
+
+
+(defwidget bluetooth []
+  (box :class "bluetooth"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+       (label :text {
+	 bt_status == "connected" ? btconnected_icon :
+	 btdisconnected_icon
+       })))
+
+
+
+(defwidget volume []
+  (box :class "volume"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+       (label :text {
+	 volume == "muted" ? muted_icon :
+	 volume == "low" ? low_icon :
+	 volume == "medium" ? medium_icon :
+	 high_icon
+       })))
+
+(defwidget power []
+  (box :class "power"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+       (label :text {
+         power == "Charging" ? 
+           (batperc >= 95 ? chargedbat_icon : chargingbat_icon) :
+         power == "Discharging" ? 
+           (batperc >= 80 ? fullbat_icon :
+            (batperc <= 30 ? lowbat_icon : mediumbat_icon)) :
+         power == "Desktop" ? desktop_icon : ""         
+        })))
+
+
+
+(defwidget brightness []
+  (box :class "brightness"
+       :orientation "h"
+       :space-evenly false
+       :halign "end"
+       (label :text {
+	 brightness == "low" ? lowbr_icon :
+	 brightness == "medium" ? mediumbr_icon :
+	 highbr_icon
+       })))
+
+(defwidget tbox_widget []
+  (eventbox :onhover 'eww update tbox_reveal=true'
+  	    :onhoverlost 'eww update tbox_reveal=false'
+  	    (box :class "tbox_widget"
+                 :orientation "h"
+       	         :space-evenly false
+	         :halign "end"
+	         (revealer :reveal tbox_reveal
+	       		   :transition 'crossfade'
+			   :duration '500ms'
+			   (box :class 'toolbox'
+       			        :orientation 'h'
+       			        (screensht)(clrpckr)(term)(files)(brwsr)(ccenter)(kbsel)))
+		 (button :class 'tool-btn'
+		         '')
+			 )))
+
+(defwidget toolbox []
+  (box :class 'toolbox'
+       :orientation 'h'
+       :space-evenly false
+       :halign 'end'
+       (screensht)(clrpckr)(term)(files)(brwsr)(ccenter)(kbsel)))
+
+(defwidget screensht []
+  (button :class "tool-btn"
+	  :onclick "hyprshot -m region --clipboard-only -z"
+	  ""))
+
+(defwidget clrpckr []
+  (button :class "tool-btn"
+	  :onclick "hyprpicker -a -q"
+	  "󰌁"))
+
+(defwidget term []
+  (button :class "tool-btn"
+	  :onclick "foot"
+	  ""))
+
+(defwidget files []
+  (button :class "tool-btn"
+	  :onclick "nemo"
+	  ""))
+
+(defwidget brwsr []
+  (button :class "tool-btn"
+	  :onclick "thorium-browser"
+	  "󰊯"))
+
+(defwidget ccenter []
+  (button :class "tool-btn"
+	  :onclick "eww open control_center"
+	  "󱗼"))
+
+(defwidget kbsel []
+  (button :class "tool-btn"
+	  :onclick "eww open keyboard_selector"
+	  ""))
+
+(defvar wifilow_icon "󰤟")
+(defvar wifimedium_icon "󰤢")
+(defvar wifihigh_icon "󰤨")
+(defvar ethernet_icon "")
+(defvar disconnected_icon "󰈂")
+
+(defvar btconnected_icon "󰂯")
+(defvar btdisconnected_icon "󰂲")
+
+(defvar muted_icon "󰖁")
+(defvar low_icon "󰕿")
+(defvar medium_icon "󰖀")
+(defvar high_icon "󰕾")
+
+(defvar chargingbat_icon "󰂄")
+(defvar chargedbat_icon "󱈏")
+(defvar fullbat_icon "󰁹")
+(defvar lowbat_icon "󰁺")
+(defvar mediumbat_icon "󰁾")
+(defvar desktop_icon "")
+
+(defvar lowbr_icon "󰃜")
+(defvar mediumbr_icon "󰃛")
+(defvar highbr_icon "󰃚")
+
+(defwidget delimiter []
+  (label :class "delimiter" :text ""))

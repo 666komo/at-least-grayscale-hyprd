@@ -1,0 +1,20 @@
+.kblabel{
+  color: $font;
+  margin: 0;
+  font-family: "OpenDyslexic Nerd";
+}
+
+.kbbtn{
+  margin: 0;
+  padding: 0;
+  background-color: $foreground;
+  border: 2px solid transparent;
+  color: $font;
+  border-radius: 5px;
+}
+
+.kbbtn:hover{
+  border: 2px solid $white;
+  color: $font-high;
+}
+

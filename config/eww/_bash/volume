@@ -1,0 +1,32 @@
+# script to detemine volume; if muted or 0, display "muted"; if lower than 30, display "low"; if lower than 60, display "medium"; else display "high"
+
+# get volume
+volume=$(amixer get Master | grep -o -m 1 "[0-9]*%" | tr -d "%")
+
+# check if muted
+if amixer get Master | grep -q off; then
+    echo "muted"
+    exit 0
+fi
+
+# check if volume is 0
+if [ $volume -eq 0 ]; then
+    echo "muted"
+    exit 0
+fi
+
+# check if volume is lower than 30
+if [ $volume -lt 30 ]; then
+    echo "low"
+    exit 0
+fi
+
+# check if volume is lower than 60
+if [ $volume -lt 60 ]; then
+    echo "medium"
+    exit 0
+fi
+
+# else, volume is high
+echo "high"
+exit 0

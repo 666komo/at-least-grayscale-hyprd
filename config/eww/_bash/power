@@ -1,0 +1,53 @@
+# bash script to detemine power/battery status of the laptop, if desktop (no battery) return "Desktop"
+# there are two functions
+# function 1: check battery percentage (if desktop return "Desktop")
+# function 2: check battery status (charging/discharging (if desktop return "Desktop"))
+# functions are executed via the command line arguments
+
+#!/bin/bash
+
+# Function to check battery percentage
+check_battery_percentage() {
+    # Check if the system has a battery
+    battery_path="/sys/class/power_supply/BAT0/capacity"
+    if [ -f "$battery_path" ]; then
+        # Read the battery percentage
+        battery_percentage=$(cat "$battery_path")
+        echo "$battery_percentage"
+    else
+        echo "Desktop"
+    fi
+}
+
+# Function to check battery status (charging/discharging)
+check_battery_status() {
+    # Check if the system has a battery
+    battery_status_path="/sys/class/power_supply/BAT0/status"
+    if [ -f "$battery_status_path" ]; then
+        # Read the battery status
+        battery_status=$(cat "$battery_status_path")
+        echo "$battery_status"
+    else
+        echo "Desktop"
+    fi
+}
+
+# Main script logic
+if [ -z "$1" ]; then
+    echo "Error: No argument provided. Use 'percentage' or 'status'."
+    exit 1
+fi
+
+case "$1" in
+    percentage)
+        check_battery_percentage
+        ;;
+    status)
+        check_battery_status
+        ;;
+    *)
+        echo "Error: Invalid argument. Use 'percentage' or 'status'."
+        exit 1
+        ;;
+esac
+

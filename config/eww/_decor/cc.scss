@@ -1,0 +1,61 @@
+.greeter-avatar {
+  margin-right: 20px;
+}
+
+.greeter-info {
+  font-weight: bold;
+}
+
+.wificc,
+.bt_cc,
+.batinfo,
+.nightlight{
+  border-radius: 20px;
+  border: 2px solid transparent;
+  padding: 10px;
+  margin: 5px;
+  background-color: $highlight;
+  color: $font;
+  transition: all 0.3s;
+}
+
+.wificc:hover,
+.bt_cc:hover,
+.batinfo:hover,
+.nightlight:hover{
+  background-color: $background;
+  color: $font;
+  border: 2px solid $white;
+}
+
+.power-controls{
+  border-radius: 20px;
+  margin: 32px 0;
+  background-color: $foreground;
+}
+
+.lockcc,
+.logoutcc,
+.sleepcc,
+.restartcc,
+.shutdowncc{
+  border-radius: 20px;
+  border: 2px solid transparent;
+  padding: 6px 6px 6px 2px;
+  margin: 5px;
+  background-color: $highlight;
+  color: $font;
+  transition: all 0.3s;
+}
+
+.lockcc:hover,
+.logoutcc:hover,
+.sleepcc:hover,
+.restartcc:hover,
+.shutdowncc:hover{
+  background-color: $background;
+  color: $font;
+  border: 2px solid $white;
+}
+
+

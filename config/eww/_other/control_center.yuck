@@ -1,0 +1,132 @@
+(defwindow control_center
+  :monitor 0
+  :geometry (geometry :x "-200px"
+		      :y "20px"
+		      :width "300px"
+		      :height "350px"
+		      :anchor "top center")
+  :stacking 'fg'
+  :windowtype 'dialog'
+  :exclusive false
+  :wm-ignore true
+  (control_center))
+
+(defwidget control_center []
+  (eventbox
+    :onhoverlost 'eww close control_center'
+    (box
+      :class 'window'
+      :orientation 'v'
+      :spacing 0
+      (greeter)(system-controls)(power-controls))))
+
+(defwidget greeter []
+  (box
+    :class 'greeter'
+    :orientation 'h'
+    :spacing 0
+    :space-evenly false
+    (greeter-avatar)(greeter-info)))
+
+(defwidget greeter-avatar []
+  (image
+    :class 'greeter-avatar'
+    :image-width 70
+    :image-height 70
+    :path "_assets/avatar.jpg"
+    ))
+
+(defwidget greeter-info []
+  (box
+    :class 'greeter-info'
+    :orientation 'v'
+    :spacing 0
+    "Welcome back, ${usr}"))
+
+(defwidget system-controls []
+  (box
+    :class 'system-controls'
+    :orientation 'v'
+    :spacing 0
+    (top_row)(bottom_row)))
+
+(defwidget top_row []
+  (box
+    :class 'top-row'
+    :orientation 'h'
+    :spacing 0
+    (wifi)(bt_cc)))
+
+(defwidget bottom_row []
+  (box
+    :class 'bottom-row'
+    :orientation 'h'
+    :spacing 0
+    (batinfo)(nightlight)))
+
+(defwidget wifi []
+  (button
+    :class 'wificc'
+    :onclick ''
+    :onrightclick ''
+    "󰤨  ${netname}"))
+
+(defwidget bt_cc []
+  (button
+    :class 'bt_cc'
+    :onclick ''
+    :onrightclick ''
+    "󰂯  ${bt_status}"))
+
+(defwidget batinfo []
+  (button
+    :class 'batinfo'
+    :onclick ''
+    :onrightclick ''
+    "󰁹  ${batperc}"))
+
+(defwidget nightlight []
+  (button
+    :class 'nightlight'
+    :onclick '_bash/night_light toggle'
+    :onrightclick ''
+    "󰖔  ${night_light}"))
+
+(defwidget power-controls []
+  (box
+    :class 'power-controls'
+    :orientation 'h'
+    :spacing 0
+    (lock_cc)(logout_cc)(sleep_cc)(restart_cc)(shutdown_cc)))
+
+(defwidget lock_cc []
+  (button
+    :class 'lockcc'
+    :onclick 'hyprlock'
+    ""))
+
+(defwidget logout_cc []
+  (button
+    :class 'logoutcc'
+    :onclick 'hyprctl dispatch exit'
+    "󰍃"))
+
+(defwidget sleep_cc []
+  (button
+    :class 'sleepcc'
+    :onclick 'systemctl suspend'
+    "󰤄"))
+
+(defwidget restart_cc []
+  (button
+    :class 'restartcc'
+    :onclick 'reboot'
+    ""))
+
+(defwidget shutdown_cc []
+  (button
+    :class 'shutdowncc'
+    :onclick 'halt -p'
+    ""))
+
+

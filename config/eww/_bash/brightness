@@ -1,0 +1,46 @@
+# bash script to determine brightness level and status; if brightness lower than 30%, out low; if lower than 70%, out medium; if higher than 70%, out high
+# use separate functions to determine brightness level and status
+# functions usage determine with input argument
+
+#!/bin/bash
+
+# Function to get the current brightness level
+get_brightness_level() {
+    # Replace this with the actual command to get brightness, e.g., `cat /sys/class/backlight/*/brightness`
+    brightness=$(brightnessctl g) # Example command; modify if needed
+    max_brightness=$(brightnessctl m) # Example command; modify if needed
+    echo $((brightness * 100 / max_brightness))
+}
+
+# Function to determine the brightness status
+determine_status() {
+    brightness=$(get_brightness_level)
+    if [ "$brightness" -lt 30 ]; then
+        echo "low"
+    elif [ "$brightness" -lt 70 ]; then
+        echo "medium"
+    else
+        echo "high"
+    fi
+}
+
+# Main script logic
+if [ -z "$1" ]; then
+    echo "Error: No argument provided. Use 'level' or 'status'."
+    exit 1
+fi
+
+case "$1" in
+    level)
+        get_brightness_level
+        ;;
+    status)
+        determine_status
+        ;;
+    *)
+        echo "Error: Invalid argument. Use 'level' or 'status'."
+        exit 1
+        ;;
+esac
+
+

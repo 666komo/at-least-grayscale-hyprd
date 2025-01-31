@@ -1,0 +1,23 @@
+### Environment variables ###   
+
+	# General Wayland Variables
+	env = XDG_SESSION_TYPE,wayland                   	  # Specify Wayland session type
+	env = XDG_SESSION_DESKTOP,Hyprland               	  # Desktop session identifier
+	env = XDG_CURRENT_DESKTOP,Hyprland               	  # Current desktop environment
+	env = GDK_BACKEND,wayland,x11,*		            	  # Prefer Wayland for GTK apps
+	env = QT_QPA_PLATFORM,wayland;xcb                    	  # Prefer Wayland for Qt apps
+	env = QT_AUTO_SCREEN_SCALE_FACTOR,1
+	env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+	env = QT_QPA_PLATFORMTHEME,qt5ct                 	  # Use qt5ct for consistent Qt theming
+	env = SDL_VIDEODRIVER,wayland                    	  # Prefer Wayland for SDL apps
+	env = _JAVA_AWT_WM_NONREPARENTING,1              	  # Fix Java app issues under Wayland
+	env = GTK_CSD,0                                  	  # Disable GTK client-side decorations for native windowing
+
+
+	# Performance and Compatibility Variables
+	env = MOZ_ENABLE_WAYLAND,1                      	  # Use Wayland for Mozilla apps (e.g., Firefox)
+	env = MOZ_DISABLE_RDD_SANDBOX,1                  	  # Disable sandbox to fix video decoding on some systems
+	env = OZONE_PLATFORM,wayland                    	  # Enable Wayland backend for Chromium-based apps
+
+	monitor = eDP-1		,1920x1080	,   0x0   ,    1
+#	monitor = HDMI-A-2,1920x1080@60,3440x0,1

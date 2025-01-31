@@ -1,0 +1,53 @@
+# bash script to determine if the night light is on or off, with two separate functions, status and toggle; if on, echo on, if off, echo off; if on, turn off, if off, turn on
+# both should work with determining if wlsunset is running or not; if yes, kill it, if no, start it; first of check input arguments (if null, output error; if status, output status via status function; if toggle, run toggle function), then check if wlsunset is running, then kill or start it, then check if it is running, then echo status
+
+#!/bin/bash
+
+# Function to check if wlsunset is running
+is_wlsunset_running() {
+    pgrep wlsunset > /dev/null
+}
+
+# Function to determine the status of the night light
+status() {
+    if is_wlsunset_running; then
+        echo "on"
+    else
+        echo "off"
+    fi
+}
+
+# Function to toggle the night light
+toggle() {
+    if is_wlsunset_running; then
+        pkill wlsunset
+    else
+        wlsunset &
+    fi
+}
+
+# Main script logic
+if [ -z "$1" ]; then
+    echo "Error: No argument provided. Use 'status' or 'toggle'."
+    exit 1
+fi
+
+case "$1" in
+    status)
+        status
+        ;;
+    toggle)
+        toggle
+        # Recheck status after toggling
+        if is_wlsunset_running; then
+            echo "on"
+        else
+            echo "off"
+        fi
+        ;;
+    *)
+        echo "Error: Invalid argument. Use 'status' or 'toggle'."
+        exit 1
+        ;;
+esac
+

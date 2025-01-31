@@ -1,0 +1,146 @@
+.bar {
+  background-color: $background;
+}
+
+.left {
+  margin-left: 5px;
+}
+
+.right {
+  margin-right: 5px;
+}
+
+.ctl_menu_widget {
+  margin: 0px;
+  padding: 0 10px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.ctl_menu_widget:hover {
+  color: $font-low;
+}
+
+.currentwindow {
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 0px;
+  font-size: 12px;
+  background-color: transparent;
+  color: $font-high;
+  transition: 0.3s;
+}
+
+.player {
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 0px;
+  font-size: 12px;
+  background-color: transparent;
+  color: $font-high;
+  transition: 0.3s;
+  min-width: 80px
+}
+
+.player:hover {
+  color: $background;
+  background-color: $font-high;
+}
+
+.workspaces {
+  padding: 2px 10px;
+  border-radius: 10px;
+  margin: 5px 5px;
+  font-size: 12px;
+  background-color: $foreground;
+}
+
+.workspace-button {
+  padding: 1px 6px 1px 3px;
+  border-radius: 10px;
+  margin: 0px 0px;
+  font-size: 12px;
+  background-color: $foreground;
+  color: $font;
+  transition: 0.3s;
+}
+
+.workspace-button:hover {
+  color: $font-high;
+}
+
+.clock {
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 0px;
+  font-size: 12px;
+  background-color: transparent;
+  color: $font-high;
+  margin-left: 5px;
+}
+
+.tray {
+  border-radius: 10px;
+  margin: 0px;
+  font-size: 14px;
+  color: $font-high;
+}
+
+.network,
+.bluetooth,
+.volume,
+.power, 
+.brightness {
+  padding: 0px 15px;
+  margin: 5px 0px;
+  font-size: 14px;
+  color: $font-high;
+}
+
+.tbox-widget{
+  padding: 1px 8px 1px 5px;
+  border-radius: 8px;
+  font-size: 12px;
+  border: 2px solid transparent;
+  margin: 0px 2px;
+  background-color: $highlight;
+  color: $font;
+  transition: 0.3s;
+}
+
+.tool-btn{
+  padding: 0px 8px 0px 5px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 2px solid transparent;
+  margin: 0px 2px;
+  background-color: transparent;
+  color: $font;
+  transition: 0.3s;
+}
+
+.tool-btn:hover {
+  color: $foreground;
+}
+
+.kbsel {
+  padding: 3px 17px 3px 10px;
+  border-radius: 10px;
+  margin: 8px 0px;
+  font-size: 12px;
+  border: 2px solid transparent;
+  color: $font;
+  transition: 0.3s;
+}
+
+.kbsel:hover {
+  color: $font-high;
+  background-color: $highlight;
+  border: 2px solid $white;
+}
+
+.delimiter {
+  padding: 0px 5px;
+  margin: 0px 12px 0 10px;
+  color: $font-high;
+}

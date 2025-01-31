@@ -1,0 +1,49 @@
+# bash script to determine the status of the bluetooth service
+# function 1: check if bluetooth connected or disconnected
+# function 2: check bluetooth connected device name and output it
+# functions are called by the main function via argument
+
+#!/bin/bash
+
+# Function to check if Bluetooth is connected or disconnected
+is_bluetooth_connected() {
+    if bluetoothctl show | grep -q "Powered: yes"; then
+        if bluetoothctl info | grep -q "Device"; then
+            echo "connected"
+        else
+            echo "disconnected"
+        fi
+    else
+        echo "Bluetooth is off."
+    fi
+}
+
+# Function to get the name of the connected Bluetooth device
+get_connected_device_name() {
+    if bluetoothctl info | grep -q "Device"; then
+        device_name=$(bluetoothctl info | grep "Alias" | cut -d ' ' -f 2-)
+        echo "$device_name"
+    else
+        echo "No device connected."
+    fi
+}
+
+# Main script logic
+if [ -z "$1" ]; then
+    echo "Error: No argument provided. Use 'status' or 'device'."
+    exit 1
+fi
+
+case "$1" in
+    status)
+        is_bluetooth_connected
+        ;;
+    device)
+        get_connected_device_name
+        ;;
+    *)
+        echo "Error: Invalid argument. Use 'status' or 'device'."
+        exit 1
+        ;;
+esac
+

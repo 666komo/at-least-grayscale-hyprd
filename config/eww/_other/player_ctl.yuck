@@ -1,0 +1,63 @@
+(defwindow player_ctl
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "20px"
+		     :width "300px"
+		     :height "200px"
+		     :anchor "top center")
+  :stacking 'fg'
+  :windowtype 'dialog'
+  :exclusive false
+  :wm-ignore 'true'
+  (player_ctl))
+
+(defwidget player_ctl []
+  (eventbox
+    :onhoverlost "eww close player_ctl"
+    (box  :class 'window'
+          :orientation "v"
+          (info)(control))))
+
+(defwidget info []
+  (box  :class "info"
+  	:orientation "v"
+	(name)(artist)(album)))
+
+(defwidget name []
+  (label :class "name"
+	 :text "${playerctl-name}"))
+
+(defwidget artist []
+  (label :class "artist"
+	 :text "${playerctl-artist}"))
+
+(defwidget album []
+  (label :class "album"
+	 :text "${playerctl-album}"))
+
+(defwidget control []
+  (box  :class "control"
+	:orientation "h"
+	(prev)(play)(next)))
+
+(defwidget prev []
+  (button :class "prev"
+	  :onclick "playerctl previous"
+	  "󰁓"))
+
+(defwidget play []
+  (button :class "play"
+	  :onclick "playerctl play-pause"
+	  (label :class "button-play" :text {
+	  playerctl-status == 'Playing' ? '' : ''})))
+
+(defwidget next []
+  (button :class "next"
+	  :onclick "playerctl next"
+	  "󰁚"))
+
+(defpoll playerctl-status :interval "100ms" :initial "()" "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} status")
+(defpoll playerctl-name   :interval "1s" :initial "()" "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} metadata title")
+(defpoll playerctl-artist :interval "1s" :initial "()" "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} metadata artist")
+(defpoll playerctl-album  :interval "1s" :initial "()" "playerctl -l | grep -v '^chromium\.' | xargs -I{} playerctl --player={} metadata album")
+
